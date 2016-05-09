@@ -34,7 +34,7 @@ int search_operation(int* arr, int i, int j, char* log, int length, char operati
     temp[0] = arr[i] * arr[j];
     break;
   case '/':
-    if (arr[j] <= 0) return false;
+    if (arr[j] <= 0 || arr[i] % arr[j] != 0) return false;
     temp[0] = arr[i] / arr[j];
     break;
   }
