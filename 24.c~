@@ -1,0 +1,143 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+
+int search(int* arr, char* log, int length);
+
+void print_array(int* arr, int length)
+{
+  for(int i = 0; i < length; i++) printf("%d, ", arr[i]);
+  printf("\b\b  \n");
+}
+
+void copy_array(int* arr1, int* arr2, int length)
+{
+  for(int i = 0; i < length; i++)
+    arr2[i] = arr1[i];
+}
+
+int search_sum(int* arr, int i, int j, char* log, int length)
+{
+  int temp[length-1];
+  temp[0] = arr[i] + arr[j];
+
+  for(int k = 1; k < length - 1; k++)
+    {
+      if((j + k) % length == i) temp[k] = arr[(j + k + 1) % length];
+      else temp[k] = arr[(j + k) % length];
+    }
+
+  print_array(arr, length);
+  if(search(temp, log, length - 1)) 
+    {
+      printf("%d + %d\n", arr[i], arr[j]);
+      return true;
+    }
+}
+
+int search(int* arr, char* log, int length)
+{
+  int temp[length];
+  // search non-commutative operations
+  for(int i = 0; i < length; i++)
+    {
+      for(int j = 0; j < length; j++)
+	{
+	  if( i != j )
+	    {
+	      //search_difference(arr, i, j, length);
+	      //search_quotient(arr, i, j, length);
+	      //printf("{%d, %d}, ", arr[i], arr[j]);
+	    }
+	}
+    }
+  
+  // search commutative operations
+  for(int i = 0; i < length; i++)
+    {
+      for(int j = i + 1; j < length; j++)
+	{
+	  search_sum(arr, i, j, log, length);
+	  //search_product(arr, i, j, length);
+	}
+    }
+}
+
+int main()
+{
+  int arr[] = {25,1,0};
+  char log[80];
+  search(arr, log, 3);
+}#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+
+int search(int* arr, char* log, int length);
+
+void print_array(int* arr, int length)
+{
+  for(int i = 0; i < length; i++) printf("%d, ", arr[i]);
+  printf("\b\b  \n");
+}
+
+void copy_array(int* arr1, int* arr2, int length)
+{
+  for(int i = 0; i < length; i++)
+    arr2[i] = arr1[i];
+}
+
+int search_sum(int* arr, int i, int j, char* log, int length)
+{
+  int temp[length-1];
+  temp[0] = arr[i] + arr[j];
+
+  for(int k = 1; k < length - 1; k++)
+    {
+      if((j + k) % length == i) temp[k] = arr[(j + k + 1) % length];
+      else temp[k] = arr[(j + k) % length];
+    }
+
+  print_array(arr, length);
+  if(search(temp, log, length - 1)) 
+    {
+      printf("%d + %d\n", arr[i], arr[j]);
+      return true;
+    }
+}
+
+int search(int* arr, char* log, int length)
+{
+  int temp[length];
+  // search non-commutative operations
+  for(int i = 0; i < length; i++)
+    {
+      for(int j = 0; j < length; j++)
+	{
+	  if( i != j )
+	    {
+	      //search_difference(arr, i, j, length);
+	      //search_quotient(arr, i, j, length);
+	      //printf("{%d, %d}, ", arr[i], arr[j]);
+	    }
+	}
+    }
+  
+  // search commutative operations
+  for(int i = 0; i < length; i++)
+    {
+      for(int j = i + 1; j < length; j++)
+	{
+	  search_sum(arr, i, j, log, length);
+	  //search_product(arr, i, j, length);
+	}
+    }
+}
+
+int main()
+{
+  int arr[] = {25,1,0};
+  char log[80];
+  search(arr, log, 3);
+}
