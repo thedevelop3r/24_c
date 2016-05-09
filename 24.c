@@ -39,17 +39,17 @@ int search_operation(int* arr, int i, int j, char* log, int length, char operati
     break;
   }
 
-  // copy remaining values into temp 
-  for(int k = 1; k < length - 1; k++)
-  {
-    if((j + k) % length == i) temp[k] = arr[(j + k + 1) % length];
-    else temp[k] = arr[(j + k) % length];
-  }
-
   // add log entry
   char entry[20];
   sprintf(entry, "%d %c %d = %d, ", arr[i], operation, arr[j], temp[0]);
   strcat(log, entry);
+
+  // copy remaining values into temp 
+  for(int k = 1; k < length - 1; k++)
+  {
+    if((j + k) % length == i) j++;
+    temp[k] = arr[(j + k) % length];
+  }
 
   // base case: no remaining calc available
   if(length == 2 && temp[0] == 24)
@@ -75,6 +75,7 @@ int search(int* arr, char* log, int length)
 	{
 	  strcpy(str, log);
 	  search_operation(arr, i, j, str, length, '-');
+	  strcpy(str, log);
 	  search_operation(arr, i, j, str, length, '/');
 	}
       }
@@ -97,5 +98,8 @@ int main()
 {
   int arr[] = {6,2,8,24};
   char log[200];
+ 
+  for(int i = 0; i < 4; i++) scanf("%d", &(arr[i]));
+
   search(arr, log, 4);
 }
