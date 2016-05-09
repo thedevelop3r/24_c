@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 
-int search(int* arr, char* log, int length);
+bool search(int* arr, char* log, int length);
 
 void print_array(int* arr, int length)
 {
@@ -57,14 +57,16 @@ int search_operation(int* arr, int i, int j, char* log, int length, char operati
     printf("%s\b\b  \n", log);
     return true;
   }
-  else
+  else if (length > 2)
   {
-    search(temp, log, length - 1);
+    return search(temp, log, length - 1);
   }
+  else return false;
 }
 
-int search(int* arr, char* log, int length)
+bool search(int* arr, char* log, int length)
 {
+  bool solveable = false;
   char str[80];
   // search non-commutative operations
   for(int i = 0; i < length; i++)
@@ -74,9 +76,9 @@ int search(int* arr, char* log, int length)
 	if(i != j)
 	{
 	  strcpy(str, log);
-	  search_operation(arr, i, j, str, length, '-');
+	  solveable = solveable || search_operation(arr, i, j, str, length, '-');
 	  strcpy(str, log);
-	  search_operation(arr, i, j, str, length, '/');
+	  solveable = solveable || search_operation(arr, i, j, str, length, '/');
 	}
       }
     }
@@ -87,19 +89,41 @@ int search(int* arr, char* log, int length)
     for(int j = i + 1; j < length; j++)
     {
       strcpy(str, log);
-      search_operation(arr, i, j, str, length, '+');
+      solveable = solveable || search_operation(arr, i, j, str, length, '+');
       strcpy(str, log);
-      search_operation(arr, i, j, str, length, '*');
+      solveable = solveable || search_operation(arr, i, j, str, length, '*');
     }
   }
+  return solveable;
 }
 
 int main()
 {
   int arr[] = {6,2,8,24};
   char log[200];
- 
-  for(int i = 0; i < 4; i++) scanf("%d", &(arr[i]));
 
-  search(arr, log, 4);
+  for(int i = 0; i < 4; i++) scanf("%d", &(arr[i]));
+  printf("\n%d\n", search(arr, log, 4));
+  
+  /*
+  int solveable = 0;
+  for(int a = 1; a <= 20; a++)
+  {
+    arr[0] = a;
+    for(int b = 1; b <= 20; b++)
+    {
+      arr[1] = b;
+      for(int c = 1; c <= 20; c++)
+      {
+	arr[2] = c;
+	for(int d = 1; d <= 20; d++)
+	{
+	  arr[3] = d;
+	  if (search(arr, log, 4)) solveable++;
+	}
+      }
+    }
+  }
+  printf("%d solveable out of %d", solveable, 20 * 20 * 20 * 20);
+  */
 }
