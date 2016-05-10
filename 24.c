@@ -3,7 +3,8 @@
 #include <stdbool.h>
 #include <string.h>
 
-bool search(int* arr, char* log, int length);
+bool solveable = false;
+void search(int* arr, char* log, int length);
 
 void print_array(int* arr, int length)
 {
@@ -17,7 +18,7 @@ void copy_array(int* arr1, int* arr2, int length)
     arr2[i] = arr1[i];
 }
 
-int search_operation(int* arr, int i, int j, char* log, int length, char operation)
+void search_operation(int* arr, int i, int j, char* log, int length, char operation)
 {
   // calc value
   int temp[length-1];
@@ -28,13 +29,13 @@ int search_operation(int* arr, int i, int j, char* log, int length, char operati
     break;
   case '-':
     temp[0] = arr[i] - arr[j];
-    if (temp[0] < 0) return false;
+    if (temp[0] < 0) return;
     break;
   case '*':
     temp[0] = arr[i] * arr[j];
     break;
   case '/':
-    if (arr[j] <= 0 || arr[i] % arr[j] != 0) return false;
+    if (arr[j] <= 0 || arr[i] % arr[j] != 0) return;
     temp[0] = arr[i] / arr[j];
     break;
   }
@@ -55,18 +56,16 @@ int search_operation(int* arr, int i, int j, char* log, int length, char operati
   if(length == 2 && temp[0] == 24)
   {
     printf("%s\b\b  \n", log);
-    return true;
+    solveable = true;
   }
   else if (length > 2)
   {
-    return search(temp, log, length - 1);
+    search(temp, log, length - 1);
   }
-  else return false;
 }
 
-bool search(int* arr, char* log, int length)
+void search(int* arr, char* log, int length)
 {
-  bool solveable = false;
   char str[80];
   // search non-commutative operations
   for(int i = 0; i < length; i++)
@@ -76,9 +75,9 @@ bool search(int* arr, char* log, int length)
 	if(i != j)
 	{
 	  strcpy(str, log);
-	  solveable = solveable || search_operation(arr, i, j, str, length, '-');
+	  search_operation(arr, i, j, str, length, '-');
 	  strcpy(str, log);
-	  solveable = solveable || search_operation(arr, i, j, str, length, '/');
+	  search_operation(arr, i, j, str, length, '/');
 	}
       }
     }
@@ -89,12 +88,11 @@ bool search(int* arr, char* log, int length)
     for(int j = i + 1; j < length; j++)
     {
       strcpy(str, log);
-      solveable = solveable || search_operation(arr, i, j, str, length, '+');
+      search_operation(arr, i, j, str, length, '+');
       strcpy(str, log);
-      solveable = solveable || search_operation(arr, i, j, str, length, '*');
+      search_operation(arr, i, j, str, length, '*');
     }
   }
-  return solveable;
 }
 
 int main()
@@ -103,7 +101,8 @@ int main()
   char log[200];
 
   for(int i = 0; i < 4; i++) scanf("%d", &(arr[i]));
-  printf("\n%d\n", search(arr, log, 4));
+  search(arr, log, 4);
+  printf("%d\n", solveable);
   
   /*
   int solveable = 0;
